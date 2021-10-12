@@ -3,9 +3,10 @@ package com.cemsafa.note_crrk_android.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(tableName = "note")
 public class Note {
 
     @PrimaryKey
@@ -24,9 +25,13 @@ public class Note {
     @ColumnInfo(name = "entry_date")
     private String entry_date;
 
+    @Ignore
+    public Note () {
+
+    }
+
+
     //constructor
-
-
     public Note(@NonNull String category, @NonNull String title, @NonNull String entry_date) {
         this.category = category;
         this.title = title;

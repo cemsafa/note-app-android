@@ -16,7 +16,7 @@
         android:layout_marginStart="10dp"/>
 
     <TextView
-        android:id="@+id/tv_add_category"
+        android:id="@+id/tv_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/search_bar"
@@ -34,14 +34,14 @@
 
     <EditText
         android:id="@+id/et_add_category"
-        android:layout_width="325dp"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_add_category"
+        android:layout_below="@+id/tv_category"
         android:layout_marginStart="10dp"
-        android:textSize="14sp"
-        android:textColor="@color/black"
         android:hint="Grocery list"
-        android:textStyle="italic"/>
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="italic" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
@@ -59,8 +59,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="125dp"
         android:layout_marginEnd="10dp" />
+
 
 
 </RelativeLayout>
