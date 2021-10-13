@@ -45,6 +45,10 @@ public class NoteRepository {
         });
     }
 
+    public LiveData<List<Folder>> getAllFolders() {
+        return noteDao.getAllFolders();
+    }
+
     public long insert(Folder folder) {
         NoteRoomDB.dbWriteExec.execute(() -> {
             noteDao.insert(folder);

@@ -41,6 +41,15 @@ public class NoteViewModel extends AndroidViewModel {
         repository.delete(note);
     }
 
+    public LiveData<List<Folder>> getAllFolders() {
+        return repository.getAllFolders();
+    }
+
+    public long insert(Folder folder) {
+        repository.insert(folder);
+        return folder.getId();
+    }
+
     public void update(Folder folder) {
         repository.update(folder);
     }

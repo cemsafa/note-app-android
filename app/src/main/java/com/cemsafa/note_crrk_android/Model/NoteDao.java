@@ -21,7 +21,7 @@ public abstract class NoteDao {
     @Query("DELETE FROM note")
     public abstract void deleteAll();
 
-    @Query("SELECT * FROM note ORDER BY folder_name ASC")
+    @Query("SELECT * FROM note ORDER BY title ASC")
     public abstract LiveData<List<Note>> getAllNotes();
 
     @Query("SELECT * FROM note WHERE id = :id")
@@ -32,6 +32,9 @@ public abstract class NoteDao {
 
     @Delete
     public abstract void delete(Note note);
+
+    @Query("SELECT * FROM folder ORDER BY name ASC")
+    public abstract LiveData<List<Folder>> getAllFolders();
 
     @Insert(onConflict = IGNORE)
     public abstract long insert(Folder folder);
