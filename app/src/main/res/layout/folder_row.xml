@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,17 +9,19 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_folder_24"/>
+        android:src="@drawable/ic_baseline_folder_24"
+        android:tint="#33B5E5"
+        tools:ignore="UseAppTint" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/categoryNameTV"
+        android:id="@+id/folderNameTV"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:layout_weight="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="Categories"/>
+        android:text="Folder Name"/>
 
     <TextView
         android:layout_width="wrap_content"
