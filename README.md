@@ -20,3 +20,7 @@ The application should have the following features:
 - [Kristina](https://github.com/kristina807287)
 - [Cem](https://github.com/cemsafa)
 - [Ruby](https://github.com/ruby2014)
+
+---
+**Third party libraries used in project**  
+[Expandable FAB](https://github.com/nambicompany/expandable-fab)
