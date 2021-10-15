@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".NewNoteActivity">
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/select"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:background="@color/purple_200"
+        android:text="Select Image"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="10dp" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
