@@ -79,6 +79,10 @@ public class NoteViewModel extends AndroidViewModel {
         repository.updateNoteInFolder(folder, note);
     }
 
+    public LiveData<List<Note>> searchInNotes(String searchQuery) {
+        return repository.searchInNotes(searchQuery);
+    }
+
     public LiveData<List<Note>> sortNotes(boolean isAsc) {
         return repository.sortNotes(isAsc);
     }

@@ -93,6 +93,10 @@ public class NoteRepository {
         });
     }
 
+    public LiveData<List<Note>> searchInNotes(String searchQuery) {
+        return noteDao.searchInNotes(searchQuery);
+    }
+
     public LiveData<List<Note>> sortNotes(boolean isAsc) {
         return noteDao.sortNotes(isAsc);
     }
