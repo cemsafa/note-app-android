@@ -1,10 +1,14 @@
-package com.cemsafa.note_crrk_android;
+package com.cemsafa.note_crrk_android.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.cemsafa.note_crrk_android.R;
+
 public class AddNoteActivity extends AppCompatActivity {
+
+    public static final String NOTE_REPLY = "note_reply";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

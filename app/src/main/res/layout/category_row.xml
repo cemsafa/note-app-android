@@ -11,19 +11,19 @@
         android:src="@drawable/ic_baseline_folder_24"/>
 
     <TextView
+        android:id="@+id/tv_category_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/categoryNameTV"
+        android:layout_weight="1"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        android:layout_weight="1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="Categories"/>
+        android:text="Categories"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <TextView
+        android:id="@+id/tv_notes_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/notesCountTV"
         android:text="0"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:paddingEnd="10dp"

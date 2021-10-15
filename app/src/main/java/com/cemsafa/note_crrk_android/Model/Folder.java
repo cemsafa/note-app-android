@@ -1,4 +1,4 @@
-package com.cemsafa.note_crrk_android.Model;
+package com.cemsafa.note_crrk_android.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -6,38 +6,42 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.List;
-
 @Entity(tableName = "folder")
 public class Folder {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     private long id;
 
     @NonNull
-    private String name;
+    @ColumnInfo (name = "folder_name")
+    private String folderName;
 
     @Ignore
     public Folder() {}
 
-    public Folder(@NonNull String name) {
-        this.name = name;
+    //constructor
+    public Folder(@NonNull String folderName) {
+
+        this.folderName = folderName;
     }
 
+    // getter
     public long getId() {
         return id;
     }
 
+    @NonNull
+    public String getFolderName() {
+        return folderName;
+    }
+
+    //setter
     public void setId(long id) {
         this.id = id;
     }
 
-    @NonNull
-    public String getName() {
-        return name;
-    }
-
-    public void setName(@NonNull String name) {
-        this.name = name;
+    public void setFolderName(@NonNull String folderName) {
+        this.folderName = folderName;
     }
 }
