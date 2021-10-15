@@ -24,7 +24,6 @@ public class NoteViewModel extends AndroidViewModel {
     }
 
     public void insert(Note note) {
-
         repository.insert(note);
     }
 
@@ -45,6 +44,8 @@ public class NoteViewModel extends AndroidViewModel {
         repository.delete(note);
     }
 
+    public void insert(Folder folder) {repository.insert(folder); }
+
     public void update(Folder folder) {
         repository.update(folder);
     }
@@ -62,8 +63,6 @@ public class NoteViewModel extends AndroidViewModel {
     }
 
     public void insert(Folder folder, Note note) {
-
-
         repository.insert(folder, note);
     }
 

@@ -43,33 +43,32 @@
         <com.nambimobile.widgets.efab.Overlay
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:overlay_orientation="portrait"/>
+            app:overlay_orientation="portrait" />
 
         <com.nambimobile.widgets.efab.ExpandableFab
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="@dimen/efab_ui_margin_medium"
             android:layout_marginEnd="@dimen/efab_ui_margin_medium"
             android:layout_marginRight="@dimen/efab_ui_margin_medium"
-            app:efab_orientation="portrait"/>
+            android:layout_marginBottom="@dimen/efab_ui_margin_medium"
+            app:efab_orientation="portrait" />
 
         <com.nambimobile.widgets.efab.FabOption
             android:id="@+id/exfab_add_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:label_text="Add Category"
+            android:onClick="addCategoryClicked"
             app:fab_icon="@drawable/ic_baseline_create_new_folder_24"
-            android:onClick="addCategoryClicked"/>
+            app:label_text="Add Category" />
 
         <com.nambimobile.widgets.efab.FabOption
             android:id="@+id/exfab_delete_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:label_text="Delete Category"
+            android:onClick="deleteCategoryClicked"
             app:fab_icon="@drawable/ic_baseline_delete_24"
-            android:onClick="deleteCategoryClicked"/>
-
+            app:label_text="Delete Category" />
 
 
     </com.nambimobile.widgets.efab.ExpandableFabLayout>

@@ -43,7 +43,6 @@ public class CategoryActivity extends AppCompatActivity implements CategoryAdapt
     FabOption exFabDelete;
 
 
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -67,7 +66,6 @@ public class CategoryActivity extends AppCompatActivity implements CategoryAdapt
         exFabDelete = findViewById(R.id.exfab_delete_category);
 
 
-
         ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 
             if (result.getResultCode() == Activity.RESULT_OK) {
@@ -83,10 +81,7 @@ public class CategoryActivity extends AppCompatActivity implements CategoryAdapt
 
         });
 
-
-
     }
-
 
     @Override
     protected void onResume() {
@@ -109,7 +104,7 @@ public class CategoryActivity extends AppCompatActivity implements CategoryAdapt
     }
 
     public void addCategoryClicked(View view) {
-            exFabAdd.setOnClickListener(new View.OnClickListener() {
+        exFabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CategoryActivity.this, AddCategoryActivity.class);
@@ -122,7 +117,6 @@ public class CategoryActivity extends AppCompatActivity implements CategoryAdapt
 
     public void deleteCategoryClicked(View view) {
     }
-
 
 
 //    @Override

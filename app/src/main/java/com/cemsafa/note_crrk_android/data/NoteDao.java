@@ -52,7 +52,7 @@ public abstract class NoteDao {
     @Query("SELECT * FROM note ORDER BY CASE WHEN :isAsc = 1 THEN title END ASC, CASE WHEN :isAsc = 0 THEN title END DESC" )
     public abstract LiveData<List<Note>> sortNotes (boolean isAsc);
 
-    @Query("SELECT * FROM note WHERE title LIKE :searchQuery OR content LIKE :searchQuery")
+    @Query("SELECT * FROM note WHERE title LIKE :searchQuery OR note_entry LIKE :searchQuery")
     public abstract LiveData<List<Note>> searchNotes (String searchQuery);
 
 

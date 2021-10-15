@@ -19,12 +19,10 @@ public class NoteRVAdapter extends RecyclerView.Adapter<NoteRVAdapter.ViewHolder
     private Context context;
     private onNoteClickListener onNoteClickListener;
 
-
-    public NoteRVAdapter(List<Note> noteList, Context context, onNoteClickListener onNoteClickListener) {
+    public NoteRVAdapter(List<Note> noteList, Context context, NoteRVAdapter.onNoteClickListener onNoteClickListener) {
         this.noteList = noteList;
         this.context = context;
         this.onNoteClickListener = onNoteClickListener;
-
     }
 
     @NonNull
@@ -37,6 +35,9 @@ public class NoteRVAdapter extends RecyclerView.Adapter<NoteRVAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull NoteRVAdapter.ViewHolder holder, int position) {
+
+        Note note = noteList.get(position);
+        holder.tv_noteList.setText(note.getFolder_name());
 
     }
 
