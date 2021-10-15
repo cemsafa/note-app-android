@@ -71,10 +71,12 @@ public class FolderActivity extends AppCompatActivity implements FolderRVAdapter
     public void onFolderClick(int position) {
         int id = getIntent().getIntExtra("noteID",-1);
         if (id != -1) {
+            noteViewModel.getFolderWithNotes().observe(this, folderWithNotes -> {
             Note n = NoteRoomDB.getInstance(getApplicationContext()).noteDao().getNoteByID(id);
-            n.setFolder_id(adapter..get(pos).getSubject_id());
-            Database.getInstance(getApplicationContext()).noteDeo().updateNote(n);
+            n.setFolder_id(folderWithNotes.get(position).folder.getId());
+            NoteRoomDB.getInstance(getApplicationContext()).noteDao().update(n);
             Toast.makeText(getApplicationContext(),"Note moved successfully.",Toast.LENGTH_SHORT).show();
+        });
         }
         noteViewModel.getFolderWithNotes().observe(this, folderWithNotes -> {
             Intent intent = new Intent(FolderActivity.this, NoteActivity.class);
