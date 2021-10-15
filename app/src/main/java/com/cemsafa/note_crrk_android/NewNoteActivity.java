@@ -19,10 +19,9 @@ import java.io.IOException;
 public class NewNoteActivity extends AppCompatActivity {
 
     Button select;
-    private static final int CAMERA_REQUEST = 102;
-    private static final int GALLERY_REQUEST = 101;
-    private static final int REQUEST_CODE = 1;
-    Bitmap image;
+    private static final int CAMERA_REQUEST = 200;
+    private static final int GALLERY_REQUEST = 201;
+    Bitmap bitmap;
     AppCompatImageView pic;
 
 
@@ -36,35 +35,29 @@ public class NewNoteActivity extends AppCompatActivity {
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openAttachments();
+                handleImageChooser();
             }
         });
     }
 
-    public void openAttachments() {
-
+    public void handleImageChooser() {
         final CharSequence[] items = { "Camera", "Gallery","Cancel" };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Attachment");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Camera")) {
-                    CaptureImage();
-                } else if (items[item].equals("Gallery")) {
-                    OpenGallery();
-                }
-                else if(items[item].equals("Cancel")){
-                    dialog.dismiss();
-                }
+        builder.setTitle("Select Option");
+        builder.setItems(items, (dialog, item) -> {
+            if (items[item].equals("With Camera")) {
+                CaptureImage();
+            } else if (items[item].equals("From Gallery")) {
+                OpenGallery();
+            }
+            else if(items[item].equals("Cancel")){
+                dialog.dismiss();
             }
         });
         builder.show();
-
     }
 
     public void CaptureImage() {
-
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
@@ -80,29 +73,18 @@ public class NewNoteActivity extends AppCompatActivity {
         super.onActivityResult(reqCode, resultCode, data);
         if (reqCode == CAMERA_REQUEST && resultCode == RESULT_OK)
         {
-            image = (Bitmap) data.getExtras().get("data");
-            pic.setImageBitmap(image);
-
-
+            bitmap = (Bitmap) data.getExtras().get("data");
+            pic.setImageBitmap(bitmap);
         }
-
         else if(reqCode == GALLERY_REQUEST && resultCode == RESULT_OK){
-
             Uri uri = data.getData();
             try {
-                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                pic.setImageBitmap(image);
-
-
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                pic.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
             }
-
-        }
-
-        else{
-
         }
     }
 }
