@@ -69,10 +69,11 @@ public class FolderActivity extends AppCompatActivity implements FolderRVAdapter
 
     @Override
     public void onFolderClick(int position) {
-        //Getting note id from folder
+        //Getting note id
         int id = getIntent().getIntExtra("noteID",-1);
         if (id != -1) {
             noteViewModel.getFolderWithNotes().observe(this, folderWithNotes -> {
+                // changing folder if of note 
             Note n = NoteRoomDB.getInstance(getApplicationContext()).noteDao().getNoteByID(id);
             n.setFolder_id(folderWithNotes.get(position).folder.getId());
             NoteRoomDB.getInstance(getApplicationContext()).noteDao().update(n);
