@@ -2,6 +2,7 @@ package com.cemsafa.note_crrk_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,8 @@ public class NewNoteActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 102;
     private static final int GALLERY_REQUEST = 101;
     private static final int REQUEST_CODE = 1;
+    Bitmap image;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
