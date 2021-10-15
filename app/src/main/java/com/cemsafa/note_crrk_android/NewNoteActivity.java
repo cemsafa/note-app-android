@@ -1,6 +1,7 @@
 package com.cemsafa.note_crrk_android;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -22,6 +23,7 @@ public class NewNoteActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST = 101;
     private static final int REQUEST_CODE = 1;
     Bitmap image;
+    AppCompatImageView pic;
 
 
     @Override
@@ -29,6 +31,7 @@ public class NewNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_note);
         select=(Button) findViewById(R.id.select);
+        pic=(AppCompatImageView) findViewById(R.id.pic);
 
         select.setOnClickListener(new View.OnClickListener() {
             @Override

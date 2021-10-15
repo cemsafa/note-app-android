@@ -18,7 +18,15 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="10dp" />
 
-
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
