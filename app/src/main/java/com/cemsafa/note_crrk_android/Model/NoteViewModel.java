@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.room.Query;
 
 import java.util.List;
 
@@ -45,6 +46,10 @@ public class NoteViewModel extends AndroidViewModel {
         return repository.getAllFolders();
     }
 
+    public LiveData<Folder> getFolder(long id) {
+        return repository.getFolder(id);
+    }
+
     public long insert(Folder folder) {
         repository.insert(folder);
         return folder.getId();
@@ -72,5 +77,13 @@ public class NoteViewModel extends AndroidViewModel {
 
     public void updateNoteInFolder(Folder folder, Note note) {
         repository.updateNoteInFolder(folder, note);
+    }
+
+    public LiveData<List<Note>> sortNotes(boolean isAsc) {
+        return repository.sortNotes(isAsc);
+    }
+
+    public void insertNoteInFolder(Folder folder, Note note) {
+        repository.insertNoteInFolder(folder, note);
     }
 }

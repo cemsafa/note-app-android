@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".AddEditActivity">
+
+    <EditText
+        android:id="@+id/titleET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="Title"
+        android:hint="Title"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/contentET"
+        android:hint="Content"
+        android:autofillHints="Content"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:gravity="top|start"
+        app:layout_constraintTop_toBottomOf="@id/titleET"
+        app:layout_constraintBottom_toTopOf="@id/saveBtn"/>
+
+    <Button
+        android:id="@+id/saveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contentET"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.cemsafa.note_crrk_android.Model;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Query;
 
 import java.util.List;
 
@@ -49,6 +50,10 @@ public class NoteRepository {
         return noteDao.getAllFolders();
     }
 
+    public LiveData<Folder> getFolder(long id) {
+        return noteDao.getFolder(id);
+    }
+
     public long insert(Folder folder) {
         NoteRoomDB.dbWriteExec.execute(() -> {
             noteDao.insert(folder);
@@ -85,6 +90,16 @@ public class NoteRepository {
     public void updateNoteInFolder(Folder folder, Note note) {
         NoteRoomDB.dbWriteExec.execute(() -> {
             noteDao.updateNoteInFolder(folder, note);
+        });
+    }
+
+    public LiveData<List<Note>> sortNotes(boolean isAsc) {
+        return noteDao.sortNotes(isAsc);
+    }
+
+    public void insertNoteInFolder(Folder folder, Note note) {
+        NoteRoomDB.dbWriteExec.execute(() -> {
+            noteDao.insertNoteInFolder(folder, note);
         });
     }
 }

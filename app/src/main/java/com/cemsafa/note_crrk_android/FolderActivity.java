@@ -19,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class FolderActivity extends AppCompatActivity implements FolderRVAdapter.OnFolderClickListener {
 
     public static final String FOLDER_NAME = "folder_name";
+    public static final String FOLDER_ID = "folder_id";
 
     private NoteViewModel noteViewModel;
     private RecyclerView recyclerView;
@@ -68,6 +69,7 @@ public class FolderActivity extends AppCompatActivity implements FolderRVAdapter
         noteViewModel.getFolderWithNotes().observe(this, folderWithNotes -> {
             Intent intent = new Intent(FolderActivity.this, NoteActivity.class);
             intent.putExtra(FOLDER_NAME, folderWithNotes.get(position).getFolder().getName());
+            intent.putExtra(FOLDER_ID, folderWithNotes.get(position).getFolder().getId());
             startActivity(intent);
         });
     }

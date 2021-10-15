@@ -36,6 +36,9 @@ public abstract class NoteDao {
     @Query("SELECT * FROM folder ORDER BY name ASC")
     public abstract LiveData<List<Folder>> getAllFolders();
 
+    @Query("SELECT * FROM folder WHERE id = :id")
+    public abstract LiveData<Folder> getFolder(long id);
+
     @Insert(onConflict = IGNORE)
     public abstract long insert(Folder folder);
 
@@ -63,5 +66,17 @@ public abstract class NoteDao {
     public void updateNoteInFolder(Folder folder, Note note) {
         update(folder);
         update(note);
+    }
+
+    @Query("SELECT * FROM note WHERE title LIKE :searchQuery OR content LIKE :searchQuery")
+    public abstract List<Note> searchInNotes(String searchQuery);
+
+    @Query("SELECT * FROM note ORDER BY CASE WHEN :isAsc = 1 THEN title END ASC, CASE WHEN :isAsc = 0 THEN title END DESC")
+    public abstract LiveData<List<Note>> sortNotes(boolean isAsc);
+
+    @Transaction
+    public void insertNoteInFolder(Folder folder, Note note) {
+        note.setFolder_id(folder.getId());
+        insert(note);
     }
 }
