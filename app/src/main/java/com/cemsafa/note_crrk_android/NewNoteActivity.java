@@ -36,7 +36,7 @@ public class NewNoteActivity extends AppCompatActivity {
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                openAttachments();
             }
         });
     }
@@ -81,6 +81,8 @@ public class NewNoteActivity extends AppCompatActivity {
         if (reqCode == CAMERA_REQUEST && resultCode == RESULT_OK)
         {
             image = (Bitmap) data.getExtras().get("data");
+            pic.setImageBitmap(image);
+
 
         }
 
@@ -89,6 +91,7 @@ public class NewNoteActivity extends AppCompatActivity {
             Uri uri = data.getData();
             try {
                 image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                pic.setImageBitmap(image);
 
 
             } catch (IOException e) {
