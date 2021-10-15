@@ -20,19 +20,22 @@ public class Note {
 
     private String folder_name;
 
+    private String note_entry;
+
     @NonNull
     private String title;
 
     private String createdDate;
 
-    // constructors
-    public Note(String folder_name, @NonNull String title, String createdDate) {
+    public Note( String folder_name, String note_entry, @NonNull String title, String createdDate) {
         this.folder_name = folder_name;
+        this.note_entry = note_entry;
         this.title = title;
         this.createdDate = createdDate;
     }
 
-    // getter
+
+// getter
 
     public long getId() {
         return id;

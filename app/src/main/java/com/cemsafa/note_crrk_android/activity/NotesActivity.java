@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.cemsafa.note_crrk_android.CategoryAdapter;
@@ -26,15 +29,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class NotesActivity extends AppCompatActivity  {
+public class NotesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+
+    public final static String NOTE_ID = "note_id";
 
     private NoteViewModel noteViewModel;
     private RecyclerView recyclerView;
     private SearchView searchNote;
     private NoteRVAdapter noteAdapter;
-
     private List<Note> noteList;
-
+    private String categoryName;
+    private long folderId = 0;
     FloatingActionButton fab;
 
 
@@ -49,18 +54,18 @@ public class NotesActivity extends AppCompatActivity  {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-      
-        noteViewModel.getNotesInFolder(folder_name).observe(this, notes -> {
+        if (getIntent().hasExtra(CategoryActivity.CATEGORY_NAME));
+        categoryName = getIntent().getStringExtra(CategoryActivity.CATEGORY_NAME);
+        folderId = getIntent().getLongExtra(CategoryActivity.FOLDER_ID, 0);
+        noteViewModel.getNotesInFolder(categoryName).observe(this, notes -> {
             noteAdapter = new NoteRVAdapter(notes, this, this);
             recyclerView.setAdapter(noteAdapter);
-
-
         });
 
         fab = findViewById(R.id.fab_add_note);
-        fab.setOnClickListener(v ->  {
-                Intent intent = new Intent(NotesActivity.this, AddNoteActivity.class);
-                startActivity(intent);
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(NotesActivity.this, AddNoteActivity.class);
+            startActivity(intent);
 
         });
 
@@ -88,9 +93,33 @@ public class NotesActivity extends AppCompatActivity  {
         });
 
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.note_search).getActionView();
+        searchView.setOnQueryTextListener(this);
+        return true;
 
     }
 
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        if (query != null) {
+            return true;
+        } else
+            return false;
+    }
+
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (newText != null) {
+            return true;
+        } else
+            return false;
+    }
 }

@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 
 import com.cemsafa.note_crrk_android.CategoryAdapter;
+import com.cemsafa.note_crrk_android.NoteRVAdapter;
 import com.cemsafa.note_crrk_android.R;
 
 
@@ -31,6 +32,7 @@ import java.util.List;
 public class CategoryActivity extends AppCompatActivity implements CategoryAdapter.onCategoryClickListener {
 
     public static final String CATEGORY_NAME = "category_name";
+    public static final String FOLDER_ID = "folder_id";
 
     private NoteViewModel noteViewModel;
     private CategoryAdapter adapter;
@@ -119,9 +121,4 @@ public class CategoryActivity extends AppCompatActivity implements CategoryAdapt
     }
 
 
-//    @Override
-//    public void addCategoryClicked(int position) {
-//
-//    }
-//
 }

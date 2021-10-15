@@ -1,6 +1,7 @@
 package com.cemsafa.note_crrk_android.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     private Folder folder;
     private FolderWithNotes folderWN;
     private EditText et_category;
+    private long folderId = 0;
 
 
     @Override
@@ -31,8 +33,29 @@ public class AddCategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
 
+        noteViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication()).create(NoteViewModel.class);
+
         et_category = (EditText) findViewById(R.id.et_add_category);
+        Button addBtn = findViewById(R.id.btn_add_category);
+        addBtn.setOnClickListener(v -> {
+
+        });
+        if(getIntent().hasExtra(CategoryActivity.FOLDER_ID)){
+            folderId = getIntent().getLongExtra(CategoryActivity.FOLDER_ID, 0);
+            noteViewModel.getFolderWithNotes().observe(this, folderWithNotes -> {
+
+                et_category.setText(folder.getFolderName());
+            });
 
 
+        }
+
+    }
+
+    private void addBtn() {
+        String category = et_category.getText().toString().trim();
+        Intent intent = new Intent();
+        intent.putExtra(CATEGORY_REPLY, category);
+        setResult(RESULT_OK, intent);
     }
 }
