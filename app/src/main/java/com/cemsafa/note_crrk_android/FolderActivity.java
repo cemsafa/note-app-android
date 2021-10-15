@@ -2,6 +2,7 @@ package com.cemsafa.note_crrk_android;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,8 +11,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.cemsafa.note_crrk_android.Model.Folder;
+import com.cemsafa.note_crrk_android.Model.Note;
+import com.cemsafa.note_crrk_android.Model.NoteRoomDB;
 import com.cemsafa.note_crrk_android.Model.NoteViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -65,6 +69,17 @@ public class FolderActivity extends AppCompatActivity implements FolderRVAdapter
 
     @Override
     public void onFolderClick(int position) {
+        //Getting note id
+        int id = getIntent().getIntExtra("noteID",-1);
+        if (id != -1) {
+            noteViewModel.getFolderWithNotes().observe(this, folderWithNotes -> {
+                // changing folder if of note 
+            Note n = NoteRoomDB.getInstance(getApplicationContext()).noteDao().getNoteByID(id);
+            n.setFolder_id(folderWithNotes.get(position).folder.getId());
+            NoteRoomDB.getInstance(getApplicationContext()).noteDao().update(n);
+            Toast.makeText(getApplicationContext(),"Note moved successfully.",Toast.LENGTH_SHORT).show();
+        });
+        }
         noteViewModel.getFolderWithNotes().observe(this, folderWithNotes -> {
             Intent intent = new Intent(FolderActivity.this, NoteActivity.class);
             intent.putExtra(FOLDER_NAME, folderWithNotes.get(position).getFolder().getName());
