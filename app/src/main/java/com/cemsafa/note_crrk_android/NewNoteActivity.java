@@ -45,7 +45,7 @@ public class NewNoteActivity extends AppCompatActivity {
                     CaptureImage();
                 } else if (items[item].equals("Gallery")) {
                     OpenGallery();
-                } 
+                }
                 else if(items[item].equals("Cancel")){
                     dialog.dismiss();
                 }
@@ -53,5 +53,11 @@ public class NewNoteActivity extends AppCompatActivity {
         });
         builder.show();
 
+    }
+
+    public void CaptureImage() {
+
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 }
