@@ -27,6 +27,10 @@ public abstract class NoteDao {
     @Query("SELECT * FROM note WHERE id = :id")
     public abstract LiveData<Note> getNote(long id);
 
+    @Query("SELECT * FROM note WHERE id = :id")
+    public  abstract Note getNoteByID(long id);
+
+
     @Update
     public abstract void update(Note note);
 
