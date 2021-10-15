@@ -7,12 +7,6 @@
     tools:context=".activity.CategoryActivity">
 
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_recyclerview"
         android:layout_width="match_parent"
@@ -20,19 +14,6 @@
         android:layout_below="@id/search_bar"
         android:layout_marginTop="1dp"
         android:paddingTop="10dp" />
-
-
-
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/fab_add_category"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_marginBottom="20dp"-->
-<!--        app:srcCompat="@android:drawable/ic_input_add"-->
-<!--        android:contentDescription="fab"/>-->
 
 
     <com.nambimobile.widgets.efab.ExpandableFabLayout

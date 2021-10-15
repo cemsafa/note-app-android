@@ -13,10 +13,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-
-import com.cemsafa.note_crrk_android.CategoryAdapter;
 import com.cemsafa.note_crrk_android.NoteRVAdapter;
 import com.cemsafa.note_crrk_android.R;
 import com.cemsafa.note_crrk_android.model.Folder;
@@ -26,7 +22,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 public class NotesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
@@ -35,9 +30,7 @@ public class NotesActivity extends AppCompatActivity implements SearchView.OnQue
 
     private NoteViewModel noteViewModel;
     private RecyclerView recyclerView;
-    private SearchView searchNote;
     private NoteRVAdapter noteAdapter;
-    private List<Note> noteList;
     private String categoryName;
     private long folderId = 0;
     FloatingActionButton fab;
