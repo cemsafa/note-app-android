@@ -65,6 +65,8 @@ public class FolderActivity extends AppCompatActivity implements FolderRVAdapter
 
     @Override
     public void onFolderClick(int position) {
+        //wORKING ON MOVE
+
         noteViewModel.getFolderWithNotes().observe(this, folderWithNotes -> {
             Intent intent = new Intent(FolderActivity.this, NoteActivity.class);
             intent.putExtra(FOLDER_NAME, folderWithNotes.get(position).getFolder().getName());
