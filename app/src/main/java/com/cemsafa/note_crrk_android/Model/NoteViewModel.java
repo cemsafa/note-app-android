@@ -87,6 +87,10 @@ public class NoteViewModel extends AndroidViewModel {
         return repository.sortNotes(isAsc);
     }
 
+    public LiveData<List<Note>> sortByDate(boolean isAsc) {
+        return repository.sortByDate(isAsc);
+    }
+
     public void insertNoteInFolder(Folder folder, Note note) {
         repository.insertNoteInFolder(folder, note);
     }

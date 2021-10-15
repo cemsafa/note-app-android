@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -123,8 +124,6 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
 
             findLocation();
 
-            findLocation();
-
             Folder folder = new Folder();
             folder.setId(folderId);
             folder.setName(folderName);
@@ -140,7 +139,14 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
                 Intent intent = new Intent(NoteActivity.this, AddEditActivity.class);
                 launcher.launch(intent);
             case R.id.fabDeleteOption:
-            case R.id.fabMoveOption:
+                return;
+            case R.id.fabSortByDateOption:
+                isAsc = !isAsc;
+                noteViewModel.sortByDate(isAsc).observe(this, notes -> {
+                    adapter = new NoteRVAdapter(notes, this, this);
+                    recyclerView.setAdapter(adapter);
+                });
+                adapter.notifyDataSetChanged();
             case R.id.fabSortOption:
                 isAsc = !isAsc;
                 noteViewModel.sortNotes(isAsc).observe(this, notes -> {
@@ -195,6 +201,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
         return checkSelfPermission(perm) == PackageManager.PERMISSION_GRANTED;
     }
 
+    @SuppressLint("MissingPermission")
     private void findLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -214,6 +221,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
         startUpdateLocation();
     }
 
+    @SuppressLint("MissingPermission")
     private void startUpdateLocation() {
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
