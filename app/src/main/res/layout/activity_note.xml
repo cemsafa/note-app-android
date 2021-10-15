@@ -46,16 +46,16 @@
         <com.nambimobile.widgets.efab.FabOption
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/fabMoveOption"
-            app:fab_icon="@drawable/ic_baseline_move_to_inbox_24"
-            app:label_text="Move"/>
+            android:id="@+id/fabSortByDateOption"
+            app:fab_icon="@drawable/ic_baseline_schedule_24"
+            app:label_text="Sort by Date"/>
 
         <com.nambimobile.widgets.efab.FabOption
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/fabSortOption"
             app:fab_icon="@drawable/ic_baseline_swap_vert_24"
-            app:label_text="Sort"/>
+            app:label_text="Sort by Title"/>
 
     </com.nambimobile.widgets.efab.ExpandableFabLayout>
 

@@ -101,6 +101,10 @@ public class NoteRepository {
         return noteDao.sortNotes(isAsc);
     }
 
+    public LiveData<List<Note>> sortByDate(boolean isAsc) {
+        return noteDao.sortByDate(isAsc);
+    }
+
     public void insertNoteInFolder(Folder folder, Note note) {
         NoteRoomDB.dbWriteExec.execute(() -> {
             noteDao.insertNoteInFolder(folder, note);
