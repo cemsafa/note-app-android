@@ -3,6 +3,7 @@ package com.cemsafa.note_crrk_android;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,21 +11,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import androidx.appcompat.widget.SearchView;
 
 import com.cemsafa.note_crrk_android.Model.Folder;
 import com.cemsafa.note_crrk_android.Model.Note;
 import com.cemsafa.note_crrk_android.Model.NoteViewModel;
-import com.nambimobile.widgets.efab.ExpandableFab;
 import com.nambimobile.widgets.efab.ExpandableFabLayout;
-import com.nambimobile.widgets.efab.FabOption;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnNoteClickListener, View.OnClickListener {
+public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnNoteClickListener, View.OnClickListener, SearchView.OnQueryTextListener {
 
     public static final String NOTE_ID = "note_id";
 
@@ -34,8 +37,9 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
 
     private String folderName;
     private long folderId = 0;
-    private Folder folderToUpdate;
     private boolean isAsc;
+
+    private List<Note> noteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +81,11 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             Intent data = result.getData();
             String titleReply = data.getStringExtra(AddEditActivity.TITLE_REPLY);
             String contentReply = data.getStringExtra(AddEditActivity.CONTENT_REPLY);
+
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA);
             String createdDate = simpleDateFormat.format(calendar.getTime());
+
             Folder folder = new Folder();
             folder.setId(folderId);
             folder.setName(folderName);
@@ -104,5 +110,35 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
                 });
                 adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.note_menu, menu);
+        MenuItem search = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView) search.getActionView();
+        searchView.setOnQueryTextListener(this);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        if (s != null) {
+            search(s);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        if (s != null) {
+            search(s);
+        }
+        return true;
+    }
+
+    private void search(String query) {
+        adapter.getFilter().filter(query);
     }
 }

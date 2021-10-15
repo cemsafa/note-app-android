@@ -12,7 +12,6 @@ import android.text.InputType;
 import android.widget.EditText;
 
 import com.cemsafa.note_crrk_android.Model.Folder;
-import com.cemsafa.note_crrk_android.Model.FolderWithNotes;
 import com.cemsafa.note_crrk_android.Model.NoteViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
