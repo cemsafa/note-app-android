@@ -43,7 +43,7 @@ public class NewNoteActivity extends AppCompatActivity {
 
     public void openAttachments() {
 
-        final CharSequence[] items = { "Camera", "Gallery","Record Audio","Cancel" };
+        final CharSequence[] items = { "Camera", "Gallery","Cancel" };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select Attachment");
         builder.setItems(items, new DialogInterface.OnClickListener() {
