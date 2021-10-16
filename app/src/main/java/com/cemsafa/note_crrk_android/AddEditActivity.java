@@ -8,7 +8,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,10 +23,14 @@ import com.cemsafa.note_crrk_android.Model.Folder;
 import com.cemsafa.note_crrk_android.Model.Note;
 import com.cemsafa.note_crrk_android.Model.NoteViewModel;
 
+import java.io.File;
+
 public class AddEditActivity extends AppCompatActivity {
 
     public static final String TITLE_REPLY = "title_reply";
     public static final String CONTENT_REPLY = "content_reply";
+    public static final String IMAGE_REPLY = "image_reply";
+    public static final String AUDIO_REPLY = "audio_reply";
 
     private EditText etTitle, etContent;
 
@@ -96,6 +103,9 @@ public class AddEditActivity extends AppCompatActivity {
             Intent intent = new Intent();
             intent.putExtra(TITLE_REPLY, title);
             intent.putExtra(CONTENT_REPLY, content);
+            // TODO: Check and Add image and audio to intent
+//            intent.putExtra(IMAGE_REPLY, image);
+//            intent.putExtra(AUDIO_REPLY, audio);
             setResult(RESULT_OK, intent);
         }
         finish();
@@ -112,12 +122,12 @@ public class AddEditActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_takePhoto:
-                Intent takePic = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                photoLauncher.launch(takePic);
+                Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                takePhotoLauncher.launch(takePhoto);
                 return false;
             case R.id.menu_pickPhoto:
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                photoLauncher.launch(pickPhoto);
+                pickPhotoLauncher.launch(pickPhoto);
                 return false;
             case R.id.menu_addAudio:
                 Intent audioIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
@@ -128,9 +138,17 @@ public class AddEditActivity extends AppCompatActivity {
         }
     }
 
-    ActivityResultLauncher<Intent> photoLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    ActivityResultLauncher<Intent> takePhotoLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
+            Bitmap bitmap = data.getParcelableExtra("data");
+        }
+    });
+
+    ActivityResultLauncher<Intent> pickPhotoLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            Intent data = result.getData();
+            Uri uri = data.getData();
         }
     });
 
