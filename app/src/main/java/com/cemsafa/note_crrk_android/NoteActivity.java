@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.SearchView;
@@ -96,7 +97,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             folderName = getIntent().getStringExtra(FolderActivity.FOLDER_NAME);
             folderId = getIntent().getLongExtra(FolderActivity.FOLDER_ID, 0);
             noteViewModel.getNotesInFolder(folderName).observe(this, notes -> {
-                adapter = new NoteRVAdapter(notes, this, this);
+                adapter = new NoteRVAdapter(notes, this, this, noteViewModel);
                 recyclerView.setAdapter(adapter);
                 noteList = notes;
             });
@@ -112,7 +113,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
     protected void onResume() {
         super.onResume();
         noteViewModel.getNotesInFolder(folderName).observe(this, notes -> {
-            adapter = new NoteRVAdapter(notes, this, this);
+            adapter = new NoteRVAdapter(notes, this, this, noteViewModel);
             recyclerView.setAdapter(adapter);
             noteList = notes;
         });
@@ -156,7 +157,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             case R.id.fabSortByDateOption:
                 isAsc = !isAsc;
                 noteViewModel.sortByDate(isAsc).observe(this, notes -> {
-                    adapter = new NoteRVAdapter(notes, this, this);
+                    adapter = new NoteRVAdapter(notes, this, this, noteViewModel);
                     recyclerView.setAdapter(adapter);
                     noteList = notes;
                 });
@@ -164,7 +165,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             case R.id.fabSortOption:
                 isAsc = !isAsc;
                 noteViewModel.sortNotes(isAsc).observe(this, notes -> {
-                    adapter = new NoteRVAdapter(notes, this, this);
+                    adapter = new NoteRVAdapter(notes, this, this, noteViewModel);
                     recyclerView.setAdapter(adapter);
                     noteList = notes;
                 });

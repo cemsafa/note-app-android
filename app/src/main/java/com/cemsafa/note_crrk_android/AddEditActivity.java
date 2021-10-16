@@ -24,6 +24,7 @@ import com.cemsafa.note_crrk_android.Model.Note;
 import com.cemsafa.note_crrk_android.Model.NoteViewModel;
 
 import java.io.File;
+import java.io.IOException;
 
 public class AddEditActivity extends AppCompatActivity {
 
@@ -149,6 +150,12 @@ public class AddEditActivity extends AppCompatActivity {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
             Uri uri = data.getData();
+            Bitmap bitmap;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     });
 

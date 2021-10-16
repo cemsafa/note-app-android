@@ -10,8 +10,10 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "note", foreignKeys = @ForeignKey(entity = Folder.class, parentColumns = "id", childColumns = "folder_id", onDelete = CASCADE, onUpdate = NO_ACTION))
-public class Note {
+public class Note implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -31,22 +33,21 @@ public class Note {
 
     private double longitude;
 
-    private String audioFilePath;
+    private String audio;
 
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    private byte[] photo;
+    private String photo;
 
     @Ignore
     public Note() {}
 
-    public Note(String folder_name, @NonNull String title, String content, String createdDate, double latitude, double longitude, String audioFilePath, byte[] photo) {
+    public Note(String folder_name, @NonNull String title, String content, String createdDate, double latitude, double longitude, String audio, String photo) {
         this.folder_name = folder_name;
         this.title = title;
         this.content = content;
         this.createdDate = createdDate;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.audioFilePath = audioFilePath;
+        this.audio = audio;
         this.photo = photo;
     }
 
@@ -115,19 +116,19 @@ public class Note {
         this.longitude = longitude;
     }
 
-    public String getAudioFilePath() {
-        return audioFilePath;
+    public String getAudio() {
+        return audio;
     }
 
-    public void setAudioFilePath(String audioFilePath) {
-        this.audioFilePath = audioFilePath;
+    public void setAudio(String audio) {
+        this.audio = audio;
     }
 
-    public byte[] getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(byte[] photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 }
