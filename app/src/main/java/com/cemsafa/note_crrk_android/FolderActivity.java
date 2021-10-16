@@ -12,8 +12,12 @@ import android.text.InputType;
 import android.widget.EditText;
 
 import com.cemsafa.note_crrk_android.Model.Folder;
+import com.cemsafa.note_crrk_android.Model.Note;
 import com.cemsafa.note_crrk_android.Model.NoteViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FolderActivity extends AppCompatActivity implements FolderRVAdapter.OnFolderClickListener {
 
@@ -60,6 +64,15 @@ public class FolderActivity extends AppCompatActivity implements FolderRVAdapter
             });
             AlertDialog dialog = builder.create();
             dialog.show();
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        noteViewModel.getFolderWithNotes().observe(this, folderWithNotes -> {
+            adapter = new FolderRVAdapter(folderWithNotes, this, this);
+            recyclerView.setAdapter(adapter);
         });
     }
 

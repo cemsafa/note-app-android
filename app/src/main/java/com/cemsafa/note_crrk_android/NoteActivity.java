@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+
 import androidx.appcompat.widget.SearchView;
 
 import com.cemsafa.note_crrk_android.Model.Folder;
@@ -60,8 +62,8 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
 
-    private static final int UPDATE_INTERVAL = 5000; // 5 seconds
-    private static final int FASTEST_INTERVAL = 3000; // 3 seconds
+    private static final int UPDATE_INTERVAL = 1000;
+    private static final int FASTEST_INTERVAL = 500;
 
     private List<String> permissionsToRequest;
     private List<String> permissions = new ArrayList<>();
@@ -88,12 +90,15 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        noteList = new ArrayList<>();
+
         if (getIntent().hasExtra(FolderActivity.FOLDER_NAME)) {
             folderName = getIntent().getStringExtra(FolderActivity.FOLDER_NAME);
             folderId = getIntent().getLongExtra(FolderActivity.FOLDER_ID, 0);
             noteViewModel.getNotesInFolder(folderName).observe(this, notes -> {
                 adapter = new NoteRVAdapter(notes, this, this);
                 recyclerView.setAdapter(adapter);
+                noteList = notes;
             });
         }
 
@@ -104,8 +109,18 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        noteViewModel.getNotesInFolder(folderName).observe(this, notes -> {
+            adapter = new NoteRVAdapter(notes, this, this);
+            recyclerView.setAdapter(adapter);
+            noteList = notes;
+        });
+    }
+
+    @Override
     public void onNoteClick(int position) {
-        noteViewModel.getAllNotes().observe(this, notes -> {
+        noteViewModel.getNotesInFolder(folderName).observe(this, notes -> {
             Intent intent = new Intent(NoteActivity.this, AddEditActivity.class);
             intent.putExtra(NOTE_ID, notes.get(position).getId());
             startActivity(intent);
@@ -138,13 +153,12 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             case R.id.fabAddOption:
                 Intent intent = new Intent(NoteActivity.this, AddEditActivity.class);
                 launcher.launch(intent);
-            case R.id.fabDeleteOption:
-                return;
             case R.id.fabSortByDateOption:
                 isAsc = !isAsc;
                 noteViewModel.sortByDate(isAsc).observe(this, notes -> {
                     adapter = new NoteRVAdapter(notes, this, this);
                     recyclerView.setAdapter(adapter);
+                    noteList = notes;
                 });
                 adapter.notifyDataSetChanged();
             case R.id.fabSortOption:
@@ -152,6 +166,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
                 noteViewModel.sortNotes(isAsc).observe(this, notes -> {
                     adapter = new NoteRVAdapter(notes, this, this);
                     recyclerView.setAdapter(adapter);
+                    noteList = notes;
                 });
                 adapter.notifyDataSetChanged();
         }

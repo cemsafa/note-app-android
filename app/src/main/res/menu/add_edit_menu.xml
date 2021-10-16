@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_takePhoto"
+        android:title="Take Photo"
+        android:icon="@drawable/ic_baseline_add_a_photo_24"
+        android:iconTint="@color/white"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_pickPhoto"
+        android:title="Pick Photo"
+        android:icon="@drawable/ic_baseline_add_photo_alternate_24"
+        android:iconTint="@color/white"
+        android:orderInCategory="200"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_addAudio"
+        android:title="Add Audio"
+        android:icon="@drawable/ic_baseline_mic_24"
+        android:iconTint="@color/white"
+        android:orderInCategory="300"
+        app:showAsAction="always"/>
+
+</menu>
