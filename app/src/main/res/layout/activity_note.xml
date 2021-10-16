@@ -39,13 +39,6 @@
         <com.nambimobile.widgets.efab.FabOption
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/fabDeleteOption"
-            app:fab_icon="@drawable/ic_baseline_delete_24"
-            app:label_text="Delete"/>
-
-        <com.nambimobile.widgets.efab.FabOption
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/fabSortByDateOption"
             app:fab_icon="@drawable/ic_baseline_schedule_24"
             app:label_text="Sort by Date"/>
