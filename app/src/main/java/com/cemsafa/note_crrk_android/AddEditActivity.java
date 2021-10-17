@@ -31,6 +31,7 @@ public class AddEditActivity extends AppCompatActivity {
     public static final String CONTENT_REPLY = "content_reply";
     public static final String IMAGE_REPLY = "image_reply";
     public static final String AUDIO_REPLY = "audio_reply";
+    public static final String NOTE_ID = "note_id";
 
     private EditText etTitle, etContent;
 
@@ -135,6 +136,7 @@ public class AddEditActivity extends AppCompatActivity {
                 return false;
             case R.id.menu_addAudio:
                 Intent audioIntent = new Intent(getApplicationContext(), RecordPlayActivity.class);
+                audioIntent.putExtra(NOTE_ID, noteId);
                 audioLauncher.launch(audioIntent);
                 return false;
             default:
@@ -173,6 +175,7 @@ public class AddEditActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> audioLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
+            audio = data.getStringExtra(RecordPlayActivity.AUDIO_REPLY);
         }
     });
 

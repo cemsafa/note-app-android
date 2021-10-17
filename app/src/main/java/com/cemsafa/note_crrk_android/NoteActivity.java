@@ -15,7 +15,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -75,8 +78,11 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
+        askForPermissions();
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        permissions.add(Manifest.permission.MANAGE_EXTERNAL_STORAGE);
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -207,6 +213,16 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
 
     private void search(String query) {
         adapter.getFilter().filter(query);
+    }
+
+    public void askForPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivity(intent);
+                return;
+            }
+        }
     }
 
     private List<String> permissionsToRequest(List<String> permissions) {

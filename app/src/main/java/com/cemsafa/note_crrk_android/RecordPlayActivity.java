@@ -1,13 +1,9 @@
 package com.cemsafa.note_crrk_android;
 
-import static android.Manifest.permission.RECORD_AUDIO;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -16,12 +12,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.cemsafa.note_crrk_android.Model.NoteViewModel;
+
 import java.io.IOException;
 
 public class RecordPlayActivity extends AppCompatActivity {
 
     public static final String AUDIO_REPLY = "audio_reply";
-    public static final int REQUEST_CODE = 1;
 
     private Button recordBtn, stopRecordBtn, playBtn, stopPlayBtn, doneBtn;
     private MediaRecorder mRecorder;
@@ -29,6 +26,8 @@ public class RecordPlayActivity extends AppCompatActivity {
     private static String mFileName = null;
 
     private NoteRVAdapter adapter;
+
+    private long noteId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,52 +41,42 @@ public class RecordPlayActivity extends AppCompatActivity {
         playBtn = findViewById(R.id.playBtn);
         stopPlayBtn = findViewById(R.id.stopPlayBtn);
         doneBtn = findViewById(R.id.doneBtn);
-        stopRecordBtn.setEnabled(false);
-        playBtn.setEnabled(false);
-        stopRecordBtn.setEnabled(false);
 
         if (getIntent().hasExtra(adapter.NOTE_AUDIO)) {
+            mFileName = getIntent().getStringExtra(adapter.NOTE_AUDIO);
+            setBtnEnable(true, false, true, false);
+        } else if (getIntent().hasExtra(AddEditActivity.NOTE_ID)) {
+            setBtnEnable(true, false, false, false);
             mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-            mFileName += "/" + getIntent().getStringExtra(adapter.NOTE_AUDIO) + ".3gp";
-        } else {
-            mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-            mFileName += "/AudioRecording.3gp";
+            noteId = getIntent().getLongExtra(AddEditActivity.NOTE_ID, 0);
+            mFileName += "/AudioRecording" + noteId + ".3gp";
         }
 
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkPermissions()) {
-                    stopRecordBtn.setEnabled(true);
-                    recordBtn.setEnabled(false);
-                    playBtn.setEnabled(false);
-                    stopPlayBtn.setEnabled(false);
-                    mRecorder = new MediaRecorder();
-                    mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                    mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                    mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-                    mRecorder.setOutputFile(mFileName);
-                    try {
-                        mRecorder.prepare();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    mRecorder.start();
-                    Toast.makeText(getApplicationContext(), "Started Recording", Toast.LENGTH_LONG).show();
-                } else {
-                    eequestPermissions();
+                setBtnEnable(false, true, false, false);
+                mRecorder = new MediaRecorder();
+                mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                mRecorder.setOutputFile(mFileName);
+                try {
+                    mRecorder.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                mRecorder.start();
+                Toast.makeText(getApplicationContext(), "Started Recording", Toast.LENGTH_LONG).show();
             }
         });
 
         stopRecordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stopRecordBtn.setEnabled(false);
-                recordBtn.setEnabled(true);
-                playBtn.setEnabled(true);
-                stopPlayBtn.setEnabled(true);
+                setBtnEnable(true, false, true, true);
                 mRecorder.stop();
+                mRecorder.reset();
                 mRecorder.release();
                 mRecorder = null;
                 Toast.makeText(getApplicationContext(), "Recording Stopped", Toast.LENGTH_LONG).show();
@@ -97,10 +86,7 @@ public class RecordPlayActivity extends AppCompatActivity {
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stopRecordBtn.setEnabled(false);
-                recordBtn.setEnabled(true);
-                playBtn.setEnabled(false);
-                stopPlayBtn.setEnabled(true);
+                setBtnEnable(true, false, false, true);
                 mPlayer = new MediaPlayer();
                 try {
                     mPlayer.setDataSource(mFileName);
@@ -118,49 +104,27 @@ public class RecordPlayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mPlayer.release();
                 mPlayer = null;
-                stopRecordBtn.setEnabled(false);
-                recordBtn.setEnabled(true);
-                playBtn.setEnabled(true);
-                stopPlayBtn.setEnabled(false);
-                Toast.makeText(getApplicationContext(),"Playing Stopped", Toast.LENGTH_SHORT).show();
+                setBtnEnable(true, false, true, false);
+                Toast.makeText(getApplicationContext(), "Playing Stopped", Toast.LENGTH_SHORT).show();
             }
         });
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent( );
+                System.out.println("SENT: " + mFileName);
+                Intent intent = new Intent();
                 intent.putExtra(AUDIO_REPLY, mFileName);
                 setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_CODE:
-                if (grantResults.length > 0) {
-                    boolean permissionToRecord = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    boolean permissionToStore = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    if (permissionToRecord && permissionToStore) {
-                        Toast.makeText(getApplicationContext(), "Permission Granted", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Permission Denied", Toast.LENGTH_LONG).show();
-                    }
-                }
-                break;
-        }
-    }
-
-    public boolean checkPermissions() {
-        int result = ActivityCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
-        int result1 = ActivityCompat.checkSelfPermission(getApplicationContext(), RECORD_AUDIO);
-        return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void eequestPermissions() {
-        ActivityCompat.requestPermissions(RecordPlayActivity.this, new String[] { RECORD_AUDIO, WRITE_EXTERNAL_STORAGE }, REQUEST_CODE);
+    private void setBtnEnable(boolean record, boolean stopRecord, boolean play, boolean stopPlay) {
+        recordBtn.setEnabled(record);
+        stopRecordBtn.setEnabled(stopRecord);
+        playBtn.setEnabled(play);
+        stopPlayBtn.setEnabled(stopPlay);
     }
 }
