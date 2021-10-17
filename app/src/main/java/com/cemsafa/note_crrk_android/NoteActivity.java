@@ -133,6 +133,8 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             Intent data = result.getData();
             String titleReply = data.getStringExtra(AddEditActivity.TITLE_REPLY);
             String contentReply = data.getStringExtra(AddEditActivity.CONTENT_REPLY);
+            String image = data.getStringExtra(AddEditActivity.IMAGE_REPLY);
+            String audio = data.getStringExtra(AddEditActivity.AUDIO_REPLY);
 
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA);
@@ -143,7 +145,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             Folder folder = new Folder();
             folder.setId(folderId);
             folder.setName(folderName);
-            Note note = new Note(folderName, titleReply, contentReply, createdDate, latitude, longitude, null, null);
+            Note note = new Note(folderName, titleReply, contentReply, createdDate, latitude, longitude, audio, image);
             noteViewModel.insertNoteInFolder(folder, note);
         }
     });

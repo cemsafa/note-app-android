@@ -126,14 +126,9 @@ public class NoteRVAdapter extends RecyclerView.Adapter<NoteRVAdapter.ViewHolder
                         Toast.makeText(context, "First add a photo", Toast.LENGTH_SHORT).show();
                     } else {
                         String receivedPhotoString = noteList.get(getAdapterPosition()).getPhoto();
-                        try {
-                            Bitmap photo = (Bitmap) ObjectSerializer.deserialize(receivedPhotoString);
-                            Intent intent = new Intent(context, ShowImageActivity.class);
-                            intent.putExtra(NOTE_PHOTO, photo);
-                            context.startActivity(intent);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Intent intent = new Intent(context, ShowImageActivity.class);
+                        intent.putExtra(NOTE_PHOTO, receivedPhotoString);
+                        context.startActivity(intent);
                     }
                 }
             });

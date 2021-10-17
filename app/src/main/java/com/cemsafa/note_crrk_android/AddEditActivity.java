@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
+import android.app.backup.BackupDataInputStream;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,8 +25,11 @@ import com.cemsafa.note_crrk_android.Model.Folder;
 import com.cemsafa.note_crrk_android.Model.Note;
 import com.cemsafa.note_crrk_android.Model.NoteViewModel;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 public class AddEditActivity extends AppCompatActivity {
 
@@ -38,6 +43,9 @@ public class AddEditActivity extends AppCompatActivity {
     private boolean isEditing = false;
     private long noteId = 0;
     private Note noteToUpdate;
+
+    private String image;
+    private String audio;
 
     private NoteViewModel noteViewModel;
 
@@ -89,7 +97,7 @@ public class AddEditActivity extends AppCompatActivity {
 
         if (isEditing) {
             Folder folder = new Folder();
-            Note note = new Note();
+            Note note = noteToUpdate;
 
             folder.setId(noteToUpdate.getFolder_id());
             folder.setName(noteToUpdate.getFolder_name());
@@ -99,14 +107,15 @@ public class AddEditActivity extends AppCompatActivity {
             note.setCreatedDate(noteToUpdate.getCreatedDate());
             note.setLatitude(noteToUpdate.getLatitude());
             note.setLongitude(noteToUpdate.getLongitude());
+            note.setPhoto(image);
+            note.setAudio(audio);
             noteViewModel.updateNoteInFolder(folder, note);
         } else {
             Intent intent = new Intent();
             intent.putExtra(TITLE_REPLY, title);
             intent.putExtra(CONTENT_REPLY, content);
-            // TODO: Check and Add image and audio to intent
-//            intent.putExtra(IMAGE_REPLY, image);
-//            intent.putExtra(AUDIO_REPLY, audio);
+            intent.putExtra(IMAGE_REPLY, image);
+            intent.putExtra(AUDIO_REPLY, audio);
             setResult(RESULT_OK, intent);
         }
         finish();
@@ -143,6 +152,13 @@ public class AddEditActivity extends AppCompatActivity {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
             Bitmap bitmap = data.getParcelableExtra("data");
+            ProxyBitmap proxyBitmap = new ProxyBitmap(bitmap);
+            try {
+                System.out.println("TakePhoto: " + "W:" + bitmap.getWidth() + "H:" + bitmap.getHeight());
+                image = ObjectSerializer.serialize((Serializable) proxyBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     });
 
@@ -150,9 +166,11 @@ public class AddEditActivity extends AppCompatActivity {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
             Uri uri = data.getData();
-            Bitmap bitmap;
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                Bitmap compressed = resizeImage(bitmap);
+                ProxyBitmap proxyBitmap = new ProxyBitmap(compressed);
+                image = ObjectSerializer.serialize((Serializable) proxyBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -164,4 +182,16 @@ public class AddEditActivity extends AppCompatActivity {
             Intent data = result.getData();
         }
     });
+
+    private Bitmap resizeImage(Bitmap bitmap) {
+
+        int scaledWidth = bitmap.getWidth() / 10;
+        int scaledHeight = bitmap.getHeight() / 10;
+
+        if (bitmap.getByteCount() <= 1000000) {
+            return bitmap;
+        } else {
+            return Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, false);
+        }
+    }
 }
