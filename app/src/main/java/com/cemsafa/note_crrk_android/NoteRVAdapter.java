@@ -29,10 +29,10 @@ import java.util.List;
 
 public class NoteRVAdapter extends RecyclerView.Adapter<NoteRVAdapter.ViewHolder> implements Filterable {
 
-    public String NOTE_PHOTO = "note_photo";
-    public String NOTE_AUDIO = "note_audio";
-    public String NOTE_LATITUDE = "note_latitude";
-    public String NOTE_LONGITUDE = "note_longitude";
+    public static final String NOTE_PHOTO = "note_photo";
+    public static final String NOTE_AUDIO = "note_audio";
+    public static final String NOTE_LATITUDE = "note_latitude";
+    public static final String NOTE_LONGITUDE = "note_longitude";
 
     private List<Note> noteList;
     private List<Note> noteListFull;
@@ -140,14 +140,9 @@ public class NoteRVAdapter extends RecyclerView.Adapter<NoteRVAdapter.ViewHolder
                         Toast.makeText(context, "First add an audio", Toast.LENGTH_SHORT).show();
                     } else {
                         String receivedAudioString = noteList.get(getAdapterPosition()).getAudio();
-//                        try {
-//                            String audio = ObjectSerializer.deserialize(receivedAudioString);
-//                            Intent intent = new Intent(context, PlayAudioActivity.class);
-//                            intent.putExtra(NOTE_AUDIO, audio);
-//                            context.startActivity(intent);
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
+                        Intent intent = new Intent(context, RecordPlayActivity.class);
+                        intent.putExtra(NOTE_AUDIO, receivedAudioString);
+                        context.startActivity(intent);
                     }
                 }
             });

@@ -7,13 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
-import android.app.backup.BackupDataInputStream;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,9 +22,6 @@ import com.cemsafa.note_crrk_android.Model.Folder;
 import com.cemsafa.note_crrk_android.Model.Note;
 import com.cemsafa.note_crrk_android.Model.NoteViewModel;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -140,7 +134,7 @@ public class AddEditActivity extends AppCompatActivity {
                 pickPhotoLauncher.launch(pickPhoto);
                 return false;
             case R.id.menu_addAudio:
-                Intent audioIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                Intent audioIntent = new Intent(getApplicationContext(), RecordPlayActivity.class);
                 audioLauncher.launch(audioIntent);
                 return false;
             default:
@@ -154,7 +148,6 @@ public class AddEditActivity extends AppCompatActivity {
             Bitmap bitmap = data.getParcelableExtra("data");
             ProxyBitmap proxyBitmap = new ProxyBitmap(bitmap);
             try {
-                System.out.println("TakePhoto: " + "W:" + bitmap.getWidth() + "H:" + bitmap.getHeight());
                 image = ObjectSerializer.serialize((Serializable) proxyBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
