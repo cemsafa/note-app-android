@@ -3,13 +3,20 @@ package com.cemsafa.note_crrk_android;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,7 +93,7 @@ public class NoteRVAdapter extends RecyclerView.Adapter<NoteRVAdapter.ViewHolder
             moveBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    System.out.println("MoveBtn pressed " + noteList.get(getAdapterPosition()).getTitle());
+                    Toast.makeText(context.getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
                 }
             });
 
