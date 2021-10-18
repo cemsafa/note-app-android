@@ -18,7 +18,7 @@ public class Note {
 
     private long folder_id;
 
-    private String folder_name;
+    private String category_name;
 
     private String note_entry;
 
@@ -27,15 +27,15 @@ public class Note {
 
     private String createdDate;
 
-    public Note( String folder_name, String note_entry, @NonNull String title, String createdDate) {
-        this.folder_name = folder_name;
+    public Note(long folder_id, String category_name, String note_entry, @NonNull String title, String createdDate) {
+        this.folder_id = folder_id;
+        this.category_name = category_name;
         this.note_entry = note_entry;
         this.title = title;
         this.createdDate = createdDate;
     }
 
-
-// getter
+    // getter
 
     public long getId() {
         return id;
@@ -45,8 +45,8 @@ public class Note {
         return folder_id;
     }
 
-    public String getFolder_name() {
-        return folder_name;
+    public String getCategory_name() {
+        return category_name;
     }
 
     @NonNull
@@ -58,6 +58,11 @@ public class Note {
         return createdDate;
     }
 
+    public String getNote_entry() {
+        return note_entry;
+    }
+
+
 
     //setter
     public void setId(long id) {
@@ -68,8 +73,8 @@ public class Note {
         this.folder_id = folder_id;
     }
 
-    public void setFolder_name(String folder_name) {
-        this.folder_name = folder_name;
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
     }
 
     public void setTitle(@NonNull String title) {
@@ -78,5 +83,9 @@ public class Note {
 
     public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public void setNote_entry(String note_entry) {
+        this.note_entry = note_entry;
     }
 }

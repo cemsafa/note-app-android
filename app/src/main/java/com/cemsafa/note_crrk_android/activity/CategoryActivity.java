@@ -75,20 +75,13 @@ public class CategoryActivity extends AppCompatActivity implements CategoryAdapt
                 String category = data.getStringExtra(AddCategoryActivity.CATEGORY_REPLY);
                 String notes = data.getStringExtra(AddNoteActivity.NOTE_REPLY);
 
-                Folder folder = new Folder(note.getFolder_name());
+                Folder folder = new Folder(note.getCategory_name());
                 noteViewModel.insert(folder, note);
 
             }
 
 
         });
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
 
     }
 
@@ -116,9 +109,5 @@ public class CategoryActivity extends AppCompatActivity implements CategoryAdapt
 
 
     }
-
-    public void deleteCategoryClicked(View view) {
-    }
-
 
 }
