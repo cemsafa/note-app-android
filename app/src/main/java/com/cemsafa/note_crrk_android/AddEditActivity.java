@@ -102,8 +102,10 @@ public class AddEditActivity extends AppCompatActivity {
             note.setCreatedDate(noteToUpdate.getCreatedDate());
             note.setLatitude(noteToUpdate.getLatitude());
             note.setLongitude(noteToUpdate.getLongitude());
-            note.setPhoto(image);
-            note.setAudio(audio);
+            if (image != null)
+                note.setPhoto(image);
+            if (audio != null)
+                note.setAudio(audio);
             noteViewModel.updateNoteInFolder(folder, note);
         } else {
             Intent intent = new Intent();

@@ -10,7 +10,13 @@ The application should have the following features:
 :white_check_mark: Information on where was the note taken (Location) should also be captured as part of the note.  
 :white_check_mark: Application should allow the user to see the location on a map for every note that was taken.  
 :white_check_mark: User should be allowed to record audio and attach it to the note or use a pre-recorded sound on the device.  
-:white_large_square: User should able as well to change the subject/category of a note i.e. move a note from one subject/category to another
+:white_large_square: User should able as well to change the subject/category of a note i.e. move a note from one subject/category to another  
+
+---
+**Set your MAPS_API_KEY in your local.properties file**  
+
+Add below line followed by your API key  
+MAPS_API_KEY=
 
 ---
 **Group Members:**  
