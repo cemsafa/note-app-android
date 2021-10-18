@@ -15,11 +15,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.SearchView;
@@ -74,10 +78,17 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
+        askForPermissions();
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        permissions.add(Manifest.permission.MANAGE_EXTERNAL_STORAGE);
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        permissions.add(Manifest.permission.CAMERA);
+        permissions.add(Manifest.permission.RECORD_AUDIO);
 
         permissionsToRequest = permissionsToRequest(permissions);
         if (permissionsToRequest.size() > 0) {
@@ -96,7 +107,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             folderName = getIntent().getStringExtra(FolderActivity.FOLDER_NAME);
             folderId = getIntent().getLongExtra(FolderActivity.FOLDER_ID, 0);
             noteViewModel.getNotesInFolder(folderName).observe(this, notes -> {
-                adapter = new NoteRVAdapter(notes, this, this);
+                adapter = new NoteRVAdapter(notes, this, this, noteViewModel);
                 recyclerView.setAdapter(adapter);
                 noteList = notes;
             });
@@ -112,7 +123,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
     protected void onResume() {
         super.onResume();
         noteViewModel.getNotesInFolder(folderName).observe(this, notes -> {
-            adapter = new NoteRVAdapter(notes, this, this);
+            adapter = new NoteRVAdapter(notes, this, this, noteViewModel);
             recyclerView.setAdapter(adapter);
             noteList = notes;
         });
@@ -120,11 +131,9 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
 
     @Override
     public void onNoteClick(int position) {
-        noteViewModel.getNotesInFolder(folderName).observe(this, notes -> {
-            Intent intent = new Intent(NoteActivity.this, AddEditActivity.class);
-            intent.putExtra(NOTE_ID, notes.get(position).getId());
-            startActivity(intent);
-        });
+        Intent intent = new Intent(NoteActivity.this, AddEditActivity.class);
+        intent.putExtra(NOTE_ID, noteList.get(position).getId());
+        startActivity(intent);
     }
 
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -132,6 +141,8 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             Intent data = result.getData();
             String titleReply = data.getStringExtra(AddEditActivity.TITLE_REPLY);
             String contentReply = data.getStringExtra(AddEditActivity.CONTENT_REPLY);
+            String image = data.getStringExtra(AddEditActivity.IMAGE_REPLY);
+            String audio = data.getStringExtra(AddEditActivity.AUDIO_REPLY);
 
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA);
@@ -142,7 +153,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             Folder folder = new Folder();
             folder.setId(folderId);
             folder.setName(folderName);
-            Note note = new Note(folderName, titleReply, contentReply, createdDate, latitude, longitude, null, null);
+            Note note = new Note(folderName, titleReply, contentReply, createdDate, latitude, longitude, audio, image);
             noteViewModel.insertNoteInFolder(folder, note);
         }
     });
@@ -153,22 +164,25 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             case R.id.fabAddOption:
                 Intent intent = new Intent(NoteActivity.this, AddEditActivity.class);
                 launcher.launch(intent);
+                break;
             case R.id.fabSortByDateOption:
                 isAsc = !isAsc;
                 noteViewModel.sortByDate(isAsc).observe(this, notes -> {
-                    adapter = new NoteRVAdapter(notes, this, this);
+                    adapter = new NoteRVAdapter(notes, this, this, noteViewModel);
                     recyclerView.setAdapter(adapter);
                     noteList = notes;
                 });
                 adapter.notifyDataSetChanged();
+                break;
             case R.id.fabSortOption:
                 isAsc = !isAsc;
                 noteViewModel.sortNotes(isAsc).observe(this, notes -> {
-                    adapter = new NoteRVAdapter(notes, this, this);
+                    adapter = new NoteRVAdapter(notes, this, this, noteViewModel);
                     recyclerView.setAdapter(adapter);
                     noteList = notes;
                 });
                 adapter.notifyDataSetChanged();
+                break;
         }
     }
 
@@ -200,6 +214,16 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
 
     private void search(String query) {
         adapter.getFilter().filter(query);
+    }
+
+    public void askForPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivity(intent);
+                return;
+            }
+        }
     }
 
     private List<String> permissionsToRequest(List<String> permissions) {

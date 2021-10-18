@@ -1,34 +1,60 @@
 package com.cemsafa.note_crrk_android;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Build;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cemsafa.note_crrk_android.Model.Note;
+import com.cemsafa.note_crrk_android.Model.NoteDao;
 import com.cemsafa.note_crrk_android.Model.NoteViewModel;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteRVAdapter extends RecyclerView.Adapter<NoteRVAdapter.ViewHolder> implements Filterable {
 
+    public static final String NOTE_PHOTO = "note_photo";
+    public static final String NOTE_AUDIO = "note_audio";
+    public static final String NOTE_LATITUDE = "note_latitude";
+    public static final String NOTE_LONGITUDE = "note_longitude";
+
     private List<Note> noteList;
     private List<Note> noteListFull;
     private Context context;
     private OnNoteClickListener onNoteClickListener;
+    private NoteViewModel noteViewModel;
 
-    public NoteRVAdapter(List<Note> noteList, Context context, OnNoteClickListener onNoteClickListener) {
+    public NoteRVAdapter() {}
+
+    public NoteRVAdapter(List<Note> noteList, Context context, OnNoteClickListener onNoteClickListener, NoteViewModel noteViewModel) {
         this.noteList = noteList;
         this.context = context;
         this.onNoteClickListener = onNoteClickListener;
         noteListFull = new ArrayList<>(noteList);
+        this.noteViewModel = noteViewModel;
     }
 
     @NonNull
@@ -52,11 +78,81 @@ public class NoteRVAdapter extends RecyclerView.Adapter<NoteRVAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView noteTitleTV;
+        public ImageButton moveBtn, mapBtn, deleteBtn, photoBtn, audioBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             noteTitleTV = itemView.findViewById(R.id.noteTitleTV);
+            moveBtn = itemView.findViewById(R.id.moveToFolderBtn);
+            deleteBtn = itemView.findViewById(R.id.deleteBtn);
+            mapBtn = itemView.findViewById(R.id.mapBtn);
+            photoBtn = itemView.findViewById(R.id.photoBtn);
+            audioBtn = itemView.findViewById(R.id.audioBtn);
+
+            moveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context.getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("You are about to delete this note. Are you sure?");
+                    builder.setPositiveButton("Yes", (dialog, which) -> {
+                        noteViewModel.delete(noteList.get(getAdapterPosition()));
+                        notifyDataSetChanged();
+                    });
+                    builder.setNegativeButton("No", (dialog, which) -> {
+                        notifyDataSetChanged();
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+            });
+
+            mapBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Double latitude = noteList.get(getAdapterPosition()).getLatitude();
+                    Double longitude = noteList.get(getAdapterPosition()).getLongitude();
+                    Intent intent = new Intent(context, MapsActivity.class);
+                    intent.putExtra(NOTE_LATITUDE, latitude);
+                    intent.putExtra(NOTE_LONGITUDE, longitude);
+                    context.startActivity(intent);
+                }
+            });
+
+            photoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (noteList.get(getAdapterPosition()).getPhoto() == null || noteList.get(getAdapterPosition()).getPhoto().equals("")) {
+                        Toast.makeText(context, "First add a photo", Toast.LENGTH_SHORT).show();
+                    } else {
+                        String receivedPhotoString = noteList.get(getAdapterPosition()).getPhoto();
+                        Intent intent = new Intent(context, ShowImageActivity.class);
+                        intent.putExtra(NOTE_PHOTO, receivedPhotoString);
+                        context.startActivity(intent);
+                    }
+                }
+            });
+
+            audioBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (noteList.get(getAdapterPosition()).getAudio() == null || noteList.get(getAdapterPosition()).getAudio().equals("")) {
+                        Toast.makeText(context, "First add an audio", Toast.LENGTH_SHORT).show();
+                    } else {
+                        String receivedAudioString = noteList.get(getAdapterPosition()).getAudio();
+                        Intent intent = new Intent(context, RecordPlayActivity.class);
+                        intent.putExtra(NOTE_AUDIO, receivedAudioString);
+                        context.startActivity(intent);
+                    }
+                }
+            });
 
             itemView.setOnClickListener(this);
         }

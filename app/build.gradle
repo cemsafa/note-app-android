@@ -26,6 +26,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -34,6 +37,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.nambimobile.widgets:expandable-fab:1.1.1'
     implementation "androidx.room:room-runtime:2.3.0"
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
     annotationProcessor "androidx.room:room-compiler:2.3.0"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     testImplementation 'junit:junit:4.+'

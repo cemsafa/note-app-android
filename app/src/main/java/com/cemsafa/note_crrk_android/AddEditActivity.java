@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
@@ -20,16 +22,25 @@ import com.cemsafa.note_crrk_android.Model.Folder;
 import com.cemsafa.note_crrk_android.Model.Note;
 import com.cemsafa.note_crrk_android.Model.NoteViewModel;
 
+import java.io.IOException;
+import java.io.Serializable;
+
 public class AddEditActivity extends AppCompatActivity {
 
     public static final String TITLE_REPLY = "title_reply";
     public static final String CONTENT_REPLY = "content_reply";
+    public static final String IMAGE_REPLY = "image_reply";
+    public static final String AUDIO_REPLY = "audio_reply";
+    public static final String NOTE_ID = "note_id";
 
     private EditText etTitle, etContent;
 
     private boolean isEditing = false;
     private long noteId = 0;
     private Note noteToUpdate;
+
+    private String image;
+    private String audio;
 
     private NoteViewModel noteViewModel;
 
@@ -81,7 +92,7 @@ public class AddEditActivity extends AppCompatActivity {
 
         if (isEditing) {
             Folder folder = new Folder();
-            Note note = new Note();
+            Note note = noteToUpdate;
 
             folder.setId(noteToUpdate.getFolder_id());
             folder.setName(noteToUpdate.getFolder_name());
@@ -91,11 +102,17 @@ public class AddEditActivity extends AppCompatActivity {
             note.setCreatedDate(noteToUpdate.getCreatedDate());
             note.setLatitude(noteToUpdate.getLatitude());
             note.setLongitude(noteToUpdate.getLongitude());
+            if (image != null)
+                note.setPhoto(image);
+            if (audio != null)
+                note.setAudio(audio);
             noteViewModel.updateNoteInFolder(folder, note);
         } else {
             Intent intent = new Intent();
             intent.putExtra(TITLE_REPLY, title);
             intent.putExtra(CONTENT_REPLY, content);
+            intent.putExtra(IMAGE_REPLY, image);
+            intent.putExtra(AUDIO_REPLY, audio);
             setResult(RESULT_OK, intent);
         }
         finish();
@@ -112,15 +129,16 @@ public class AddEditActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_takePhoto:
-                Intent takePic = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                photoLauncher.launch(takePic);
+                Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                takePhotoLauncher.launch(takePhoto);
                 return false;
             case R.id.menu_pickPhoto:
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                photoLauncher.launch(pickPhoto);
+                pickPhotoLauncher.launch(pickPhoto);
                 return false;
             case R.id.menu_addAudio:
-                Intent audioIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                Intent audioIntent = new Intent(getApplicationContext(), RecordPlayActivity.class);
+                audioIntent.putExtra(NOTE_ID, noteId);
                 audioLauncher.launch(audioIntent);
                 return false;
             default:
@@ -128,15 +146,50 @@ public class AddEditActivity extends AppCompatActivity {
         }
     }
 
-    ActivityResultLauncher<Intent> photoLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    ActivityResultLauncher<Intent> takePhotoLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
+            Bitmap bitmap = data.getParcelableExtra("data");
+            ProxyBitmap proxyBitmap = new ProxyBitmap(bitmap);
+            try {
+                image = ObjectSerializer.serialize((Serializable) proxyBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    });
+
+    ActivityResultLauncher<Intent> pickPhotoLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            Intent data = result.getData();
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                Bitmap compressed = resizeImage(bitmap);
+                ProxyBitmap proxyBitmap = new ProxyBitmap(compressed);
+                image = ObjectSerializer.serialize((Serializable) proxyBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     });
 
     ActivityResultLauncher<Intent> audioLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
+            audio = data.getStringExtra(RecordPlayActivity.AUDIO_REPLY);
         }
     });
+
+    private Bitmap resizeImage(Bitmap bitmap) {
+
+        int scaledWidth = bitmap.getWidth() / 10;
+        int scaledHeight = bitmap.getHeight() / 10;
+
+        if (bitmap.getByteCount() <= 1000000) {
+            return bitmap;
+        } else {
+            return Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, false);
+        }
+    }
 }
