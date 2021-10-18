@@ -131,11 +131,9 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
 
     @Override
     public void onNoteClick(int position) {
-        noteViewModel.getNotesInFolder(folderName).observe(this, notes -> {
-            Intent intent = new Intent(NoteActivity.this, AddEditActivity.class);
-            intent.putExtra(NOTE_ID, notes.get(position).getId());
-            startActivity(intent);
-        });
+        Intent intent = new Intent(NoteActivity.this, AddEditActivity.class);
+        intent.putExtra(NOTE_ID, noteList.get(position).getId());
+        startActivity(intent);
     }
 
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -166,6 +164,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
             case R.id.fabAddOption:
                 Intent intent = new Intent(NoteActivity.this, AddEditActivity.class);
                 launcher.launch(intent);
+                break;
             case R.id.fabSortByDateOption:
                 isAsc = !isAsc;
                 noteViewModel.sortByDate(isAsc).observe(this, notes -> {
@@ -174,6 +173,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
                     noteList = notes;
                 });
                 adapter.notifyDataSetChanged();
+                break;
             case R.id.fabSortOption:
                 isAsc = !isAsc;
                 noteViewModel.sortNotes(isAsc).observe(this, notes -> {
@@ -182,6 +182,7 @@ public class NoteActivity extends AppCompatActivity implements NoteRVAdapter.OnN
                     noteList = notes;
                 });
                 adapter.notifyDataSetChanged();
+                break;
         }
     }
 
