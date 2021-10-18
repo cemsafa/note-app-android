@@ -31,7 +31,7 @@ MAPS_API_KEY=
 [Expandable FAB](https://github.com/nambicompany/expandable-fab)  
 
 ---
-**Resources that I referred**
+**Resources that I referred**  
 [Saving Bitmap as Serializable Object](http://xperience57.blogspot.com/2015/09/android-saving-bitmap-as-serializable.html)  
 [How to make Bitmap compress without change the bitmap size?](https://stackoverflow.com/a/62957959)  
 [Android studio throwing IOException: Operation not permitted](https://stackoverflow.com/a/68141908)  
